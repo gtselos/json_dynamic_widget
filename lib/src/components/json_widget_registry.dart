@@ -38,6 +38,7 @@ class JsonWidgetRegistry {
     JsonWidgetRegistry? parent,
     List<ArgProcessor>? argProcessors,
     Map<String, dynamic>? values,
+    this.remoteErrorLogFunction,
   })  : debugLabel = (parent != null ? '${parent.debugLabel}.' : '') +
             (debugLabel ?? 'child_${++childCount}'),
         _parent = parent {
@@ -83,6 +84,7 @@ class JsonWidgetRegistry {
   StreamSubscription<WidgetValueChanged>? _parentValueStreamSubscription;
   StreamController<WidgetValueChanged>? _valueStreamController =
       StreamController<WidgetValueChanged>.broadcast();
+  Function? remoteErrorLogFunction;
 
   /// A navigator key that is required in order to use the
   /// [fun_key_navigate_named] and [fun_key_navigate_pop] functions.  This holds
@@ -238,9 +240,7 @@ class JsonWidgetRegistry {
     final builder = container?.builder ?? _parent?.getWidgetBuilder(type);
 
     if (builder == null) {
-      throw Exception(
-        'No widget with type: "$type" found in the registry [$debugLabel].',
-      );
+      throw WidgetTypeNotFoundException(type, debugLabel);
     }
 
     return builder;
