@@ -168,6 +168,17 @@ $errorValue
 
 $map
 ''', e, stack);
+        if (e is WidgetTypeNotFoundException) {
+          if (registry.remoteErrorLogFunction != null) {
+            registry.remoteErrorLogFunction!.call(e.toString(), stack);
+          }
+          return JsonWidgetData.fromDynamic(
+            {
+              'type': 'container',
+            },
+            registry: registry,
+          );
+        }
         throw HandledJsonWidgetException(
           e,
           stack,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:json_dynamic_widget/json_dynamic_widget.dart';
 
 @immutable
 class HandledJsonWidgetException implements Exception {
@@ -21,4 +22,14 @@ ${data == null ? '<no data>' : ((data is Map || data is List) ? const JsonEncode
 ${cause == null ? '<no cause>' : cause.toString()}
 ${stackTrace == null ? '<no stack>' : stackTrace.toString()}
 ''';
+}
+
+class WidgetTypeNotFoundException implements Exception {
+  final String type;
+  final String registryDebugLabel;
+
+  const WidgetTypeNotFoundException(this.type, this.registryDebugLabel);
+
+  @override
+  String toString() => 'No widget with type: "$type" found in the registry [$registryDebugLabel].';
 }
